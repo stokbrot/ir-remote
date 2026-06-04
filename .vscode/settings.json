@@ -1,0 +1,11 @@
+{
+    "chat.tools.terminal.autoApprove": {
+        "cmake": true,
+        "Set-Content": true,
+        "Path('esp.cpp').write_text('''#include": true,
+        "/^exit\\(\\)$/": {
+            "approve": true,
+            "matchCommandLine": true
+        }
+    }
+}
