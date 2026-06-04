@@ -1,40 +1,40 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="18.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\jakob\Desktop\ir_remote_gui\main.cpp">
+    <ClCompile Include="C:\Users\Jakob\Desktop\irremote\ir-remote\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jakob\Desktop\ir_remote_gui\gui.cpp">
+    <ClCompile Include="C:\Users\Jakob\Desktop\irremote\ir-remote\gui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jakob\Desktop\ir_remote_gui\esp.cpp">
+    <ClCompile Include="C:\Users\Jakob\Desktop\irremote\ir-remote\esp.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jakob\Desktop\ir_remote_gui\imgui\imgui.cpp">
+    <ClCompile Include="C:\Users\Jakob\Desktop\irremote\ir-remote\imgui\imgui.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jakob\Desktop\ir_remote_gui\imgui\imgui_draw.cpp">
+    <ClCompile Include="C:\Users\Jakob\Desktop\irremote\ir-remote\imgui\imgui_draw.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jakob\Desktop\ir_remote_gui\imgui\imgui_tables.cpp">
+    <ClCompile Include="C:\Users\Jakob\Desktop\irremote\ir-remote\imgui\imgui_tables.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jakob\Desktop\ir_remote_gui\imgui\imgui_widgets.cpp">
+    <ClCompile Include="C:\Users\Jakob\Desktop\irremote\ir-remote\imgui\imgui_widgets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jakob\Desktop\ir_remote_gui\imgui\imgui_impl_dx9.cpp">
+    <ClCompile Include="C:\Users\Jakob\Desktop\irremote\ir-remote\imgui\imgui_impl_dx9.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\jakob\Desktop\ir_remote_gui\imgui\imgui_impl_win32.cpp">
+    <ClCompile Include="C:\Users\Jakob\Desktop\irremote\ir-remote\imgui\imgui_impl_win32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\jakob\Desktop\ir_remote_gui\CMakeLists.txt" />
+    <CustomBuild Include="C:\Users\Jakob\Desktop\irremote\ir-remote\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{9B496462-6746-329B-ACCE-3E12DD5DE1A6}</UniqueIdentifier>
+      <UniqueIdentifier>{48940E90-9133-3419-A145-71EF1D35F697}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

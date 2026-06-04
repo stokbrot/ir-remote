@@ -1,6 +1,6 @@
-^C:\USERS\JAKOB\DESKTOP\IR_REMOTE_GUI\CMAKELISTS.TXT
+^C:\USERS\JAKOB\DESKTOP\IRREMOTE\IR-REMOTE\CMAKELISTS.TXT
 setlocal
-"C:\Program Files (x86)\Microsoft Visual Studio\18\BuildTools\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/jakob/Desktop/ir_remote_gui -BC:/Users/jakob/Desktop/ir_remote_gui/build --check-stamp-file C:/Users/jakob/Desktop/ir_remote_gui/build/CMakeFiles/generate.stamp
+"C:\Program Files\Microsoft Visual Studio\2022\Community\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe" -SC:/Users/Jakob/Desktop/irremote/ir-remote -BC:/Users/Jakob/Desktop/irremote/ir-remote/build --check-stamp-file C:/Users/Jakob/Desktop/irremote/ir-remote/build/CMakeFiles/generate.stamp
 if %errorlevel% neq 0 goto :cmEnd
 :cmEnd
 endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
