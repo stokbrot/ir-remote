@@ -1,58 +1,38 @@
 ﻿#include "esp.h"
 
-
-CURL* esp::curlHandle = nullptr;
+std::shared_ptr<httplib::Client> esp::client = nullptr;
 
 static esp globalEspInitializer;
 
-   
-
-// Callback function for curl to write response data
-static size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* userp)
-{
-    userp->append((char*)contents, size * nmemb);
-    return size * nmemb;
-}
-
 esp::esp()
 {
-    if (!curlHandle)
+    if (!client)
     {
-        curlHandle = curl_easy_init();
-        if (!curlHandle)
-            printf("Failed to initialize libcurl\n");
+        client = std::make_shared<httplib::Client>("http://192.168.4.1");
+        client->set_connection_timeout(1, 0);
+        client->set_read_timeout(6, 0);
+        if (!client)
+            printf("Failed to initialize httplib client\n");
     }
 }
 
 esp::~esp()
 {
-    if (curlHandle)
+    if (client)
     {
-        curl_easy_cleanup(curlHandle);
-        curlHandle = nullptr;
+        client = nullptr;
     }
 }
 
 bool esp::set(const std::string& command)
 {
-    if (command.empty() || !curlHandle)
+    if (command.empty() || !client)
         return false;
 
-    const std::string url = "http://192.168.4.1/" + command;
-    char errorBuffer[CURL_ERROR_SIZE] = {0};
-
-    curl_easy_setopt(curlHandle, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curlHandle, CURLOPT_NOBODY, 1L);
-    curl_easy_setopt(curlHandle, CURLOPT_HTTPGET, 1L);
-    curl_easy_setopt(curlHandle, CURLOPT_NOSIGNAL, 1L);
-    curl_easy_setopt(curlHandle, CURLOPT_CONNECTTIMEOUT, 1L);
-    curl_easy_setopt(curlHandle, CURLOPT_TIMEOUT, 6L);
-    curl_easy_setopt(curlHandle, CURLOPT_ERRORBUFFER, errorBuffer);
-
-    CURLcode result = curl_easy_perform(curlHandle);
-    if (result != CURLE_OK)
+    auto res = client->Get("/" + command);
+    if (!res || res->status < 200 || res->status >= 300)
     {
-        printf("Error performing HTTP request: %s\n", errorBuffer);
+        printf("Error performing HTTP request\n");
         return false;
     }
 
@@ -61,65 +41,38 @@ bool esp::set(const std::string& command)
 
 bool esp::get(const std::string& endpoint, std::string& responseBuffer)
 {
-    if (endpoint.empty() || !curlHandle)
+    if (endpoint.empty() || !client)
         return false;
-
-    const std::string url = "http://192.168.4.1/" + endpoint;
-    char errorBuffer[CURL_ERROR_SIZE] = {0};
 
     responseBuffer.clear();
 
-    curl_easy_setopt(curlHandle, CURLOPT_URL, url.c_str());
-    curl_easy_setopt(curlHandle, CURLOPT_HTTPGET, 1L);
-    curl_easy_setopt(curlHandle, CURLOPT_NOSIGNAL, 1L);
-    curl_easy_setopt(curlHandle, CURLOPT_CONNECTTIMEOUT, 1L);
-    curl_easy_setopt(curlHandle, CURLOPT_TIMEOUT, 6L);
-    curl_easy_setopt(curlHandle, CURLOPT_ERRORBUFFER, errorBuffer);
-    curl_easy_setopt(curlHandle, CURLOPT_WRITEFUNCTION, WriteCallback);
-    curl_easy_setopt(curlHandle, CURLOPT_WRITEDATA, &responseBuffer);
-
-    CURLcode result = curl_easy_perform(curlHandle);
-    if (result != CURLE_OK)
+    auto res = client->Get("/" + endpoint);
+    if (!res || res->status < 200 || res->status >= 300)
     {
-        printf("Error performing HTTP GET request: %s\n", errorBuffer);
+        printf("Error performing HTTP GET request\n");
         return false;
     }
 
+    responseBuffer = res->body;
     return true;
 }
 
 bool esp::sendRaw(std::vector<int> rawData){
-    if (!curlHandle)
+    if (!client)
         return false;
 
     std::string json = "{\"raw\":[";
     for(size_t i = 0; i < rawData.size(); i++){
         json += std::to_string(rawData[i]);
-        if(i != rawData.size() - 1 ){json += ",";}  // nach jedem wert ein , ausser beim letzten
+        if(i != rawData.size() - 1 ){json += ",";}
     }
 
     json += "],\"freq\":38}";
 
-    struct curl_slist* headers = nullptr;
-
-    headers = curl_slist_append(headers,"Content-Type: application/json");
-
-    curl_easy_setopt(curlHandle, CURLOPT_URL, "http://192.168.4.1/sendRaw");
-    curl_easy_setopt(curlHandle, CURLOPT_POST, 1L);
-    curl_easy_setopt(curlHandle, CURLOPT_HTTPHEADER, headers);
-    curl_easy_setopt(curlHandle, CURLOPT_POSTFIELDS, json.c_str());
-    curl_easy_setopt(curlHandle, CURLOPT_TIMEOUT, 1L);
-
-    
-    char errorBuffer[CURL_ERROR_SIZE] = {0};
-
-    curl_easy_setopt(curlHandle, CURLOPT_ERRORBUFFER, errorBuffer);
-    
-
-    CURLcode result = curl_easy_perform(curlHandle);
-    if (result != CURLE_OK)
+    auto res = client->Post("/sendRaw", json, "application/json");
+    if (!res || res->status < 200 || res->status >= 300)
     {
-        printf("Error performing HTTP GET request: %s\n", errorBuffer);
+        printf("Error performing HTTP POST request\n");
         return false;
     }
 

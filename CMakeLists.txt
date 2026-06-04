@@ -1,3 +1,9 @@
+
+#   cmake -B build -S .
+#   cmake --build build --config Debug
+#   cmake --build build --config Release
+#   ./build/Debug/app.exe
+
 cmake_minimum_required(VERSION 3.20)
 project(ir_remote)
 
@@ -19,8 +25,6 @@ message(STATUS "CMAKE_SOURCE_DIR = ${CMAKE_SOURCE_DIR}")
 message(STATUS "IMGUI_DIR = ${IMGUI_DIR}")
 message(STATUS "IMGUI_SRC = ${IMGUI_SRC}")
 
-find_package(CURL CONFIG REQUIRED)
-
 add_executable(app 
     main.cpp
     gui.cpp
@@ -30,12 +34,13 @@ add_executable(app
 
 target_include_directories(app PRIVATE
     ${IMGUI_DIR}
+    ${CMAKE_SOURCE_DIR}/external
 )
 
 target_link_libraries(app PRIVATE 
-    CURL::libcurl
     d3d9
     gdi32    
+    ws2_32
 )
 
 set_target_properties(app PROPERTIES WIN32_EXECUTABLE TRUE)

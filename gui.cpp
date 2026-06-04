@@ -124,6 +124,8 @@ void gui::Create_Window(const wchar_t* windowName, const wchar_t* className) noe
 	CreateDevice();
 	CreateImGui();
 	
+	ShowWindow(window, SW_SHOW);
+	UpdateWindow(window);
 }
 
 void gui::Destroy_Window() noexcept
@@ -231,9 +233,6 @@ void gui::EndRender() noexcept
 	HRESULT result = device->Present(nullptr, nullptr, nullptr, nullptr);
 	if (result == D3DERR_DEVICELOST && device->TestCooperativeLevel() == D3DERR_DEVICENOTRESET)
 		ResetDevice();
-
-	ShowWindow(gui::window, SW_SHOWDEFAULT);
-	UpdateWindow(gui::window);
 }
 
 

@@ -16,7 +16,7 @@ int CALLBACK WinMain(
 		gui::Render();
 		// add gui Elements in: gui::Render()
 		gui::EndRender();	
-		std::this_thread::sleep_for(std::chrono::microseconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1)); 
 
 		//main loop
 		//OutputDebugStringA("Printing like this...\n");

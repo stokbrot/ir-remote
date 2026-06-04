@@ -2,10 +2,12 @@
 
 #pragma comment(lib, "d3d9.lib")
 
+#include "esp.h" // before windows.h else winsock will get include instead of winsock2 or other bs
+
 #include <Windows.h>
 #include <d3d9.h>
 
-#include "esp.h"
+
 
 
 
