@@ -5,6 +5,8 @@
 #include <chrono>
 #include <string>
 
+extern esp remote;  // Global remote object from main.cpp
+
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(
 	HWND hWnd, 
 	UINT msg, 
@@ -264,33 +266,25 @@ void gui::Render() noexcept
 
 	ImGui::Text("MICROCONTROLLER INFRAROT LOGIK FEHRNBEDIEHUNG     - M.I.L.F");
 
-	if (ImGui::Button("RECORD")){
-		showEspError = !esp::set("record");
+	if (ImGui::Button("RECORD")) {
+		showEspError = !remote.set("record");
 	}
-
-	ImGui::SameLine();
-
-	if(ImGui::Button("SAVE")){
-		//showEspError = !esp::set("save");
-	}
-
-	
 
 	ImGui::Separator();
-	ImGui::Text("Last IR Command:");
 
-
-	if(ImGui::Button("VOL DOWN")){
-		esp::sendRaw(esp::vol_down);		
+	if (ImGui::Button("VOL DOWN")) {
+		remote.sendRaw(remote.vol_down);
 	}
 
 	ImGui::SameLine();
 
-	if(ImGui::Button("VOL UP")){
-		esp::sendRaw(esp::vol_up);		
+	if (ImGui::Button("VOL UP")) {
+		remote.sendRaw(remote.vol_up);
 	}
 
-	
+	ImGui::Separator();
+
+	ImGui::Text("Last IR Command:");
 
 	// Periodic update logic
 	auto now = std::chrono::high_resolution_clock::now();
@@ -298,7 +292,7 @@ void gui::Render() noexcept
 	
 	if (elapsed > UPDATE_INTERVAL_MS)
 	{
-		if (esp::get("last", commandBuffer))
+		if (remote.get("last", commandBuffer))
 		{
 			lastUpdateTime = now;
 		}

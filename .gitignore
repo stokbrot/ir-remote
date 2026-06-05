@@ -1,0 +1,20 @@
+# git pull
+# git status
+# git add -A
+# git commit -m "message"
+# git push
+#
+# New branch:
+# git switch -c feature-name
+#
+# Switch branch:
+# git switch main
+#
+# Merge:
+# git switch main
+# git merge feature-name
+# git push
+
+.vs/
+.vscode/
+build/

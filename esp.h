@@ -5,25 +5,26 @@
 #include <vector>
 #include <memory>
 
+// Probleme in der classe esp:
+// Wir nutzen kein Multithreading -> gui freezed wenn anfrage/timout generell
+// Keine wirkliches error handling, nur true/false zurück
+// ich sage einfach mal wir gehen von best case aus weil es reicht
+
 class esp
 {
 public:
     esp();
     ~esp();
 
-    static bool set(const std::string& command);
-    static bool get(const std::string& endpoint, std::string& responseBuffer);
-    static bool sendRaw(std::vector<int> rawData);
+    // Control methods
+    bool set(const std::string& command);
+    bool get(const std::string& endpoint, std::string& responseBuffer);
+    bool sendRaw(std::vector<int> rawData);
 
-
-    inline static std::vector<int> vol_down = {8588,4244,546,516,546,1594,542,1592,542,516,546,516,546,1592,544,514,548,1590,544,1590,546,516,546,516,546,1592,544,1590,544,516,546,1590,546,516,546,1590,546,1592,542,516,546,1590,544,516,546,518,544,516,546,516,546,516,546,514,548,1590,546,516,548,1588,544,1590,544,1592,544,1590,520,25316,8594,4242,546,516,546,1590,526,1610,544,516,548,514,542,1594,546,516,522,1614,522,1614,522,540,546,516,532,1604,522,1616,520,540,546};
- 
-    inline static std::vector<int> vol_up = {8590,4244,546,516,546,1590,544,1590,544,514,548,516,548,1590,546,514,546,1592,522,1612,544,516,546,516,546,1590,544,1592,544,516,546,1590,544,514,548,516,546,1614,520,516,546,1616,520,516,546,516,546,516,546,516,546,1590,544,516,546,1590,546,514,546,1590,546,1592,544,1592,542,1590,544,25292,8594,4240,546,516,546,1590,546,1590,544,516,546,516,546,1592,536,524,546,1592,544,1590,544,516,546,516,546,1590,544,1592,544,516,546};
- 
-
+    // IR command data for buttons
+    std::vector<int> vol_down;
+    std::vector<int> vol_up;
 
 private:
- 
-    static std::shared_ptr<httplib::Client> client;
-   
+    std::shared_ptr<httplib::Client> client;
 };

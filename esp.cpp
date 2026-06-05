@@ -1,27 +1,19 @@
 ﻿#include "esp.h"
 
-std::shared_ptr<httplib::Client> esp::client = nullptr;
-
-static esp globalEspInitializer;
-
 esp::esp()
 {
+    client = std::make_shared<httplib::Client>("http://192.168.4.1");
+    client->set_connection_timeout(0, 500000);  // 100ms - fast fail if device unreachable
+    client->set_read_timeout(0, 500000);        // 100ms - typical LAN response time
+    
     if (!client)
-    {
-        client = std::make_shared<httplib::Client>("http://192.168.4.1");
-        client->set_connection_timeout(1, 0);
-        client->set_read_timeout(6, 0);
-        if (!client)
-            printf("Failed to initialize httplib client\n");
-    }
+        printf("Failed to initialize httplib client\n");
 }
 
 esp::~esp()
 {
     if (client)
-    {
         client = nullptr;
-    }
 }
 
 bool esp::set(const std::string& command)
@@ -30,13 +22,7 @@ bool esp::set(const std::string& command)
         return false;
 
     auto res = client->Get("/" + command);
-    if (!res || res->status < 200 || res->status >= 300)
-    {
-        printf("Error performing HTTP request\n");
-        return false;
-    }
-
-    return true;
+    return (bool)res;
 }
 
 bool esp::get(const std::string& endpoint, std::string& responseBuffer)
@@ -44,37 +30,32 @@ bool esp::get(const std::string& endpoint, std::string& responseBuffer)
     if (endpoint.empty() || !client)
         return false;
 
-    responseBuffer.clear();
-
     auto res = client->Get("/" + endpoint);
-    if (!res || res->status < 200 || res->status >= 300)
-    {
-        printf("Error performing HTTP GET request\n");
+
+    if (!res)
         return false;
-    }
 
     responseBuffer = res->body;
     return true;
 }
 
-bool esp::sendRaw(std::vector<int> rawData){
-    if (!client)
+bool esp::sendRaw(std::vector<int> rawData)
+{
+    if (!client || rawData.empty())
         return false;
 
+    // JSON form: {"raw":[...], "freq":38}
     std::string json = "{\"raw\":[";
-    for(size_t i = 0; i < rawData.size(); i++){
-        json += std::to_string(rawData[i]);
-        if(i != rawData.size() - 1 ){json += ",";}
-    }
 
+    for (size_t i = 0; i < rawData.size(); i++)
+    {
+        json += std::to_string(rawData[i]);
+        if (i < rawData.size() - 1)
+            json += ",";
+    }
+    
     json += "],\"freq\":38}";
 
     auto res = client->Post("/sendRaw", json, "application/json");
-    if (!res || res->status < 200 || res->status >= 300)
-    {
-        printf("Error performing HTTP POST request\n");
-        return false;
-    }
-
-    return true;
+    return (bool)res;
 }
